@@ -1,0 +1,34 @@
+keycloak:
+  auth-server-url: http://localhost:8082
+  realm: bank
+  scope: openid
+  secret: wraaupXqE5JovEsvsTt284YsDvuyeDxf
+  cert: http://localhost:8082/realms/bank/protocol/openid-connect/certs
+  client-id: admin
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  r2dbc:
+    url: r2dbc:pool:postgres://localhost:5432/individuals
+    username: postgres
+    password: postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/individuals
+    user: postgres
+    password: postgres
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/bank
+        registration:
+          keycloak:
+            client-id: admin
+#            client-secret: t4RdXMZpLsFWHzmBFg8ESWr7r6lNqbmk
+#            authorization-grant-type: authorization_code
+#            scope:
+#              - openid

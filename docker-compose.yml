@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - ./data2/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.3
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KC_DB: "postgres"
+      KC_DB_URL: "jdbc:postgresql://postgres/keycloak"
+      KC_DB_USERNAME: "postgres"
+      KC_DB_PASSWORD: "postgres"
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+      KC_IMPORT: /opt/keycloak/data/import/realm-config.json
+    volumes:
+      - ./realm-config.json:/opt/keycloak/data/import/realm-config.json
+    ports:
+      - "8082:8080"
+    depends_on:
+     - postgres
+  individual:
+    image: "glaptev8/individuals:v0.0"
+    environment:
+      AUTH_SERVER_URL: "http://keycloak:8080"
+      CERT: "http://keycloak:8080/realms/bank/protocol/openid-connect/certs"
+      ISSUER_URI: "http://keycloak:8080/realms/bank"
+      SPRING_DATASOURCE_URL: "r2dbc:pool:postgres://postgres:5432/individuals"
+      FLYWAY_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/individuals"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
+    ports:
+      - "8084:8080"
+    depends_on:
+      - postgres
+      - keycloak

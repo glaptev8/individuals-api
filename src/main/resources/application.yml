@@ -1,0 +1,34 @@
+keycloak:
+  auth-server-url: ${AUTH_SERVER_URL}
+  realm: bank
+  scope: openid
+  secret: wraaupXqE5JovEsvsTt284YsDvuyeDxf
+  cert: ${CERT}
+  client-id: admin
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  r2dbc:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  flyway:
+    url: ${FLYWAY_DATASOURCE_URL}
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${ISSUER_URI}
+        registration:
+          keycloak:
+            client-id: admin
+#            client-secret: t4RdXMZpLsFWHzmBFg8ESWr7r6lNqbmk
+#            authorization-grant-type: authorization_code
+#            scope:
+#              - openid
