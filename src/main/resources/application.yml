@@ -22,3 +22,4 @@ integration:
     base-url: ${PERSON_URL}
     save: "save"
     verify: "verify"
+    user-info: "userInfo"

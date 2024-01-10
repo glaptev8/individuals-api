@@ -27,7 +27,7 @@ dependencies {
     implementation "org.keycloak:keycloak-admin-client:$keycloak"
 
     implementation 'org.leantech-common:dto:1.2-SNAPSHOT'
-    implementation 'org.leantech-common:webclient:1.1-SNAPSHOT'
+    implementation 'org.leantech-common:webclient:1.2-SNAPSHOT'
 
     implementation "org.mapstruct:mapstruct:$mapStructVersion"
     implementation "org.projectlombok:lombok:$lombokVersion"

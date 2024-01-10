@@ -9,6 +9,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.leantech.individuals.dto.RegistrationRequest;
 import org.leantech.individuals.dto.RegistrationResponseDto;
 import org.leantech.person.dto.UserDto;
+import org.leantech.webclient.client.person.PersonClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -28,6 +29,7 @@ public class KeycloakAdminClientServiceImpl implements KeycloakAdminClientServic
   private final KeyCloakUtil keycloak;
   @Value("${keycloak.realm}")
   private String realm;
+  private final PersonClient personClient;
 
   @Override
   public Mono<RegistrationResponseDto> createUser(RegistrationRequest registrationRequest) {
@@ -80,10 +82,9 @@ public class KeycloakAdminClientServiceImpl implements KeycloakAdminClientServic
   public Mono<UserDto> getUser() {
     return ReactiveSecurityContextHolder.getContext()
       .map(context -> (Jwt) context.getAuthentication().getPrincipal())
-      .map(jwt -> {
-        var userDto = new UserDto();
-        userDto.setEmail(jwt.getClaimAsString("email"));
-        return userDto;
+      .flatMap(jwt -> {
+        var email = jwt.getClaimAsString("email");
+        return personClient.userInfo(email);
       });
   }
 }
