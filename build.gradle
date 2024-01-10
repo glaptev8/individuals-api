@@ -9,8 +9,15 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url = 'http://localhost:8083/repository/maven-snapshots'
+        credentials {
+            username = "admin"
+            password = "admin123"
+        }
+        allowInsecureProtocol true
+    }
 }
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation "org.springframework.boot:spring-boot-starter-webflux"
@@ -19,12 +26,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation "org.keycloak:keycloak-admin-client:$keycloak"
 
-    implementation "org.postgresql:postgresql:$postgreSqlVersion"
-    implementation "org.postgresql:r2dbc-postgresql:$r2dbcVersion"
-    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.flywaydb:flyway-core'
+    implementation "com.google.guava:guava:$guava"
 
+
+    implementation 'org.leantech-common:dto:1.2-SNAPSHOT'
+    implementation 'org.leantech-common:webclient:1.1-SNAPSHOT'
 
     implementation "org.mapstruct:mapstruct:$mapStructVersion"
     implementation "org.projectlombok:lombok:$lombokVersion"
@@ -33,7 +39,6 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:$mapStructVersion"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation "org.testcontainers:postgresql:$testContainersPostgres"
     testImplementation 'io.projectreactor:reactor-test:3.6.1'
 }
 

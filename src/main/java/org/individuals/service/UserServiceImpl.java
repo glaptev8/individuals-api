@@ -1,9 +1,10 @@
 package org.individuals.service;
 
-import org.individuals.dto.RegistrationRequest;
-import org.individuals.dto.RegistrationResponseDto;
-import org.individuals.entity.User;
-import org.individuals.repository.UserRepository;
+import org.individuals.util.JacksonUtil;
+import org.leantech.individuals.dto.RegistrationRequest;
+import org.leantech.individuals.dto.RegistrationResponseDto;
+import org.leantech.person.dto.UserSaveDto;
+import org.leantech.webclient.client.person.PersonClient;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,8 @@ import reactor.core.publisher.Mono;
 public class UserServiceImpl implements UserService {
 
   private final KeycloakAdminClientServiceImpl keycloakAdminClientService;
-  private final UserRepository userRepository;
+  private final PersonClient personClient;
+  private final JacksonUtil jacksonUtil;
 
   @Override
   public Mono<RegistrationResponseDto> saveUser(RegistrationRequest registrationRequest) {
@@ -22,16 +24,12 @@ public class UserServiceImpl implements UserService {
       return Mono.error(new RuntimeException("confirm password incorrect"));
     }
 
-    return userRepository.existsByEmail(registrationRequest.getEmail())
-      .flatMap(userExists -> {
-        if (userExists) {
-          return Mono.error(new RuntimeException("user exists"));
-        }
-        return keycloakAdminClientService.createUser(registrationRequest)
-          .flatMap(registrationResponseDto -> userRepository.save(User.builder()
-                                                                    .email(registrationRequest.getEmail())
-                                                                    .build())
-            .map(user -> registrationResponseDto));
+    return keycloakAdminClientService.createUser(registrationRequest)
+      .flatMap(registrationResponseDto -> {
+        var userSaveDto = jacksonUtil.read("drafts/test_user.json", UserSaveDto.class);
+        userSaveDto.getUser().setEmail(registrationRequest.getEmail());
+        return personClient.save(userSaveDto)
+          .map(user -> registrationResponseDto);
       });
   }
 }

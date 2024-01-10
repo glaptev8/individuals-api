@@ -26,21 +26,28 @@ services:
     volumes:
       - ./realm-config.json:/opt/keycloak/data/import/realm-config.json
     ports:
-      - "8082:8080"
-    depends_on:
-     - postgres
-  individual:
-    image: "glaptev8/individuals:v0.0"
+      - "8084:8080"
+  person-api:
+    image: "glaptev8/person-api:v0.0"
     environment:
-      AUTH_SERVER_URL: "http://keycloak:8080"
-      CERT: "http://keycloak:8080/realms/bank/protocol/openid-connect/certs"
-      ISSUER_URI: "http://keycloak:8080/realms/bank"
-      SPRING_DATASOURCE_URL: "r2dbc:pool:postgres://postgres:5432/individuals"
-      FLYWAY_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/individuals"
+      SPRING_DATASOURCE_URL: "r2dbc:pool:postgres://postgres:5432/person"
+      FLYWAY_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/person"
       SPRING_DATASOURCE_USERNAME: "postgres"
       SPRING_DATASOURCE_PASSWORD: "postgres"
     ports:
-      - "8084:8080"
+      - "8086:8080"
+    depends_on:
+      - postgres
+  individual:
+    image: "glaptev8/individuals:v0.0"
+    environment:
+      PERSON_URL: "http://person-api:8080/api/v1/user"
+      AUTH_SERVER_URL: "http://keycloak:8080"
+      CERT: "http://keycloak:8080/realms/bank/protocol/openid-connect/certs"
+      ISSUER_URI: "http://keycloak:8080/realms/bank"
+    ports:
+      - "8087:8080"
     depends_on:
       - postgres
       - keycloak
+      - person-api

@@ -1,8 +1,8 @@
 package org.individuals.service;
 
-import org.individuals.dto.RegistrationRequest;
-import org.individuals.dto.RegistrationResponseDto;
-import org.individuals.dto.UserDto;
+import org.leantech.individuals.dto.RegistrationRequest;
+import org.leantech.individuals.dto.RegistrationResponseDto;
+import org.leantech.person.dto.UserDto;
 
 import reactor.core.publisher.Mono;
 

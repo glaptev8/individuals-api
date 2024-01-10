@@ -2,13 +2,13 @@ package org.individuals.service;
 
 import java.util.List;
 
-import org.individuals.dto.RegistrationRequest;
-import org.individuals.dto.RegistrationResponseDto;
-import org.individuals.dto.UserDto;
 import org.individuals.util.KeyCloakUtil;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.leantech.individuals.dto.RegistrationRequest;
+import org.leantech.individuals.dto.RegistrationResponseDto;
+import org.leantech.person.dto.UserDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -80,8 +80,10 @@ public class KeycloakAdminClientServiceImpl implements KeycloakAdminClientServic
   public Mono<UserDto> getUser() {
     return ReactiveSecurityContextHolder.getContext()
       .map(context -> (Jwt) context.getAuthentication().getPrincipal())
-      .map(jwt -> UserDto.builder()
-        .email(jwt.getClaimAsString("email"))
-        .build());
+      .map(jwt -> {
+        var userDto = new UserDto();
+        userDto.setEmail(jwt.getClaimAsString("email"));
+        return userDto;
+      });
   }
 }

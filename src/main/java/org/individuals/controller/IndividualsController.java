@@ -1,10 +1,10 @@
 package org.individuals.controller;
 
-import org.individuals.dto.RegistrationRequest;
-import org.individuals.dto.RegistrationResponseDto;
-import org.individuals.dto.UserDto;
 import org.individuals.service.KeycloakAdminClientService;
 import org.individuals.service.UserService;
+import org.leantech.individuals.dto.RegistrationRequest;
+import org.leantech.individuals.dto.RegistrationResponseDto;
+import org.leantech.person.dto.UserDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
