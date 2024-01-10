@@ -16,3 +16,9 @@ spring:
         registration:
           keycloak:
             client-id: admin
+
+integration:
+  person-property:
+    base-url: ${PERSON_URL}
+    save: "save"
+    verify: "verify"

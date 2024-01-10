@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserService {
     return keycloakAdminClientService.createUser(registrationRequest)
       .flatMap(registrationResponseDto -> {
         var userSaveDto = jacksonUtil.read("drafts/test_user.json", UserSaveDto.class);
+        userSaveDto.getUser().setPassword(registrationRequest.getPassword());
         userSaveDto.getUser().setEmail(registrationRequest.getEmail());
         return personClient.save(userSaveDto)
           .map(user -> registrationResponseDto);

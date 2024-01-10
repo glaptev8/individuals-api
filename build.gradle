@@ -26,9 +26,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation "org.keycloak:keycloak-admin-client:$keycloak"
 
-    implementation "com.google.guava:guava:$guava"
-
-
     implementation 'org.leantech-common:dto:1.2-SNAPSHOT'
     implementation 'org.leantech-common:webclient:1.1-SNAPSHOT'
 
