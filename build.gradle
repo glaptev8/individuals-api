@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation "org.keycloak:keycloak-admin-client:$keycloak"
 
-    implementation 'org.leantech-common:dto:1.2-SNAPSHOT'
+    implementation 'org.leantech-common:dto:1.7-SNAPSHOT'
     implementation 'org.leantech-common:webclient:1.2-SNAPSHOT'
 
     implementation "org.mapstruct:mapstruct:$mapStructVersion"
