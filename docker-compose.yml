@@ -57,6 +57,7 @@ services:
       SPRING_DATASOURCE_USERNAME: "postgres"
       KAFKA_HOST: "http://kafka:9093"
       SPRING_DATASOURCE_PASSWORD: "postgres"
+    pull_policy: always
     ports:
       - "8086:8080"
     depends_on:
@@ -87,3 +88,37 @@ services:
       - postgres
       - keycloak
       - person-api
+  user-api:
+    image: "glaptev8/user-api:v0.0"
+    environment:
+      SPRING_DATASOURCE_URL: "r2dbc:pool:postgres://postgres:5432/user_api"
+      FLYWAY_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/user_api"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
+    pull_policy: always
+    ports:
+      - "8089:8080"
+  payments:
+    image: "glaptev8/payments:v0.0"
+    environment:
+      SPRING_DATASOURCE_URL: "r2dbc:pool:postgres://postgres:5432/payments"
+      FLYWAY_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/payments"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      PERSON_URL: "http://person-api:8080/api/v1/user"
+      USER_URL: "http://user-api:8080/api/v1/wallets"
+      PAYMENT_PROVIDER_URL: "http://payment-provider:8080/api/v1/payments"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
+    pull_policy: always
+    ports:
+      - "8090:8080"
+  payment-provider:
+    image: "glaptev8/payment-provider:v0.0"
+    environment:
+      SPRING_DATASOURCE_URL: "r2dbc:pool:postgres://postgres:5432/payment_provider"
+      FLYWAY_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/payment_provider"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
+    ports:
+      - "8092:8080"
+    depends_on:
+      - postgres

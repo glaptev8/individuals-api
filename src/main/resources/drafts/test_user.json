@@ -5,7 +5,7 @@
     "password": "example",
     "phone_number": "+123456789",
     "language": "en",
-    "profile_type": "ADMIN",
+    "profile_type": "INDIVIDUAL",
     "secret_key": "example"
   },
   "profile": {
@@ -28,12 +28,10 @@
     "status": "PENDING"
   },
   "authority": {
-    "created_at": "2022-01-11T18:40:00",
     "profile_type": "AUTHORITY",
     "authority": "example"
   },
   "admin": {
-    "created_at": "2022-01-13T20:50:00",
     "name": "John",
     "surname": "Doe"
   },
